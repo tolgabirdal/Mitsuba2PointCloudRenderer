@@ -7,8 +7,9 @@ Calling the script 'render_mitsuba2_pc.py' automatically performs the following 
   3. processes the EXR into a jpg file.
   4. iterates for multiple point clouds present in the tensor (.npy)
   
-It could process both plys and npy. The script is heavily inspired by [PointFlow renderer](https://github.com/zekunhao1995/PointFlowRenderer). 
-The intermediate EXR/XML files will remain in the folder and has to be removed by the user. 
+It could process both plys and npy. The script is heavily inspired by [PointFlow renderer](https://github.com/zekunhao1995/PointFlowRenderer) and here is how the outputs can look like:
+
+![mitsuba rendering](mitsuba_git.png)
 
 ## Dependencies
 * Python 3.6
@@ -26,5 +27,5 @@ python3.6 render_mitsuba2_pc.py chair.npy
 python3.6 render_mitsuba2_pc.py chair.ply
 ```
 
-All the outputs including the resulting JPG files will be saved in the directory of the input point cloud.
+All the outputs including the resulting JPG files will be saved in the directory of the input point cloud. The intermediate EXR/XML files will remain in the folder and has to be removed by the user. 
 
