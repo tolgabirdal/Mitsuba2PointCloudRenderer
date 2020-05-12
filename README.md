@@ -7,7 +7,7 @@ The script performs the following in order:
   3. processes the EXR into a jpg file.
   4. iterates for multiple point clouds present in the tensor (.npy)
   
-It could process both plys and npy. The script builds heavily upon [PointFlow renderer](https://github.com/zekunhao1995/PointFlowRenderer). 
+It could process both plys and npy. The script is heavily inspired by [PointFlow renderer](https://github.com/zekunhao1995/PointFlowRenderer). 
 The intermediate EXR/XML files will remain in the folder and has to be removed by the user. 
 
 ## Dependencies
