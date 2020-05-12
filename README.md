@@ -20,10 +20,10 @@ Also make sure that the 'PATH_TO_MITSUBA2' in the code is replaced by the path t
 ## Instructions
 ```bash
 # Render a single or multiple JPG file(s) as:
-python3.6 pointflow_fig_colorful.py chair.npy
+python3.6 render_mitsuba2_pc.py chair.npy
 
 # It could also render a ply file
-python3.6 pointflow_fig_colorful.py chair.ply
+python3.6 render_mitsuba2_pc.py chair.ply
 ```
 
 All the outputs will be saved in the directory of the input point cloud.
