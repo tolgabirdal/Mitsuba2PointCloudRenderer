@@ -19,6 +19,8 @@ Ensure that Mitsuba 2 can be called as 'mitsuba' by following the [instructions 
 Also make sure that the 'PATH_TO_MITSUBA2' in the code is replaced by the path to your local 'mitsuba' file.
 
 ## Instructions
+
+Replace 'PATH_TO_MITSUBA2' in the 'render_mitsuba2_pc.py' with the path to your local 'mitsuba' file.
 ```bash
 # Render a single or multiple JPG file(s) as:
 python3.6 render_mitsuba2_pc.py chair.npy
