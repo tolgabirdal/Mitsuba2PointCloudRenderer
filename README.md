@@ -1,0 +1,30 @@
+# Multiple Point Cloud Renderer using Mitsuba 2
+
+The script performs the following in order:
+
+  1. generates an XML file, which describes a 3D scene in the format used by Mitsuba. 
+  2. call Mitsuba2 to render the point cloud into an EXR
+  3. process the EXR into a jpg file.
+  4. iterate for multiple point clouds present in the tensor (.npy)
+  
+It could process both plys and npy. The script builds heavily upon [PointFlow renderer](https://github.com/zekunhao1995/PointFlowRenderer). 
+The intermediate EXR/XML files will remain in the folder and has to be removed by the user. 
+
+## Dependencies
+* Python 3.6
+* [Mitsuba 2](http://www.mitsuba-renderer.org/)
+
+Ensure that Mitsuba 2 can be called as 'mitsuba' by following the [instructions here](https://mitsuba2.readthedocs.io/en/latest/src/getting_started/compiling.html#linux).
+Also make sure that the 'PATH_TO_MITSUBA2' in the code is replaced by the path to your local 'mitsuba' file.
+
+## Instructions
+```bash
+# Render a single or multiple JPG file(s) as:
+python3.6 pointflow_fig_colorful.py chair.npy
+
+# It could also render a ply file
+python3.6 pointflow_fig_colorful.py chair.ply
+```
+
+The outputs will be saved in the same 
+
