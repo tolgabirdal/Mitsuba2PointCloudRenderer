@@ -5,14 +5,14 @@ import Imath
 from PIL import Image
 from plyfile import PlyData, PlyElement
 
-PATH_TO_MITSUBA2 = "/home/tolga/Codes/mitsuba2/build/dist/mitsuba" # mitsuba exectuable
+PATH_TO_MITSUBA2 = "/home/tolga/Codes/mitsuba2/build/dist/mitsuba"  # mitsuba exectuable
 
 # replaced by command line arguments
 # PATH_TO_NPY = 'pcl_ex.npy' # the tensor to load
 
 # note that sampler is changed to 'independent' and the ldrfilm is changed to hdrfilm
 xml_head = \
-"""
+    """
 <scene version="0.6.0">
     <integrator type="path">
         <integer name="maxDepth" value="-1"/>
@@ -45,7 +45,7 @@ xml_head = \
 
 # I also use a smaller point size
 xml_ball_segment = \
-"""
+    """
     <shape type="sphere">
         <float name="radius" value="0.015"/>
         <transform name="toWorld">
@@ -58,7 +58,7 @@ xml_ball_segment = \
 """
 
 xml_tail = \
-"""
+    """
     <shape type="rectangle">
         <ref name="bsdf" id="surfaceMaterial"/>
         <transform name="toWorld">
@@ -79,24 +79,27 @@ xml_tail = \
 </scene>
 """
 
-def colormap(x,y,z):
-    vec = np.array([x,y,z])
-    vec = np.clip(vec, 0.001,1.0)
-    norm = np.sqrt(np.sum(vec**2))
+
+def colormap(x, y, z):
+    vec = np.array([x, y, z])
+    vec = np.clip(vec, 0.001, 1.0)
+    norm = np.sqrt(np.sum(vec ** 2))
     vec /= norm
     return [vec[0], vec[1], vec[2]]
+
 
 def standardize_bbox(pcl, points_per_object):
     pt_indices = np.random.choice(pcl.shape[0], points_per_object, replace=False)
     np.random.shuffle(pt_indices)
-    pcl = pcl[pt_indices] # n by 3
+    pcl = pcl[pt_indices]  # n by 3
     mins = np.amin(pcl, axis=0)
     maxs = np.amax(pcl, axis=0)
-    center = ( mins + maxs ) / 2.
-    scale = np.amax(maxs-mins)
+    center = (mins + maxs) / 2.
+    scale = np.amax(maxs - mins)
     print("Center: {}, Scale: {}".format(center, scale))
-    result = ((pcl - center)/scale).astype(np.float32) # [-0.5, 0.5]
+    result = ((pcl - center) / scale).astype(np.float32)  # [-0.5, 0.5]
     return result
+
 
 # only for debugging reasons
 def writeply(vertices, ply_file):
@@ -104,7 +107,7 @@ def writeply(vertices, ply_file):
     points = []
     for v in range(sv[0]):
         vertex = vertices[v]
-        points.append("%f %f %f\n" % (vertex[0],vertex[1],vertex[2]))
+        points.append("%f %f %f\n" % (vertex[0], vertex[1], vertex[2]))
     print(np.shape(points))
     file = open(ply_file, "w")
     file.write('''ply
@@ -118,6 +121,7 @@ def writeply(vertices, ply_file):
     ''' % (len(vertices), "".join(points)))
     file.close()
 
+
 # as done in https://gist.github.com/drakeguan/6303065
 def ConvertEXRToJPG(exrfile, jpgfile):
     File = OpenEXR.InputFile(exrfile)
@@ -128,8 +132,8 @@ def ConvertEXRToJPG(exrfile, jpgfile):
     rgb = [np.fromstring(File.channel(c, PixType), dtype=np.float32) for c in 'RGB']
     for i in range(3):
         rgb[i] = np.where(rgb[i] <= 0.0031308,
-                             (rgb[i] * 12.92) * 255.0,
-                             (1.055 * (rgb[i] ** (1.0 / 2.4)) - 0.055) * 255.0)
+                          (rgb[i] * 12.92) * 255.0,
+                          (1.055 * (rgb[i] ** (1.0 / 2.4)) - 0.055) * 255.0)
 
     rgb8 = [Image.frombytes("F", Size, c.tostring()).convert("L") for c in rgb]
     # rgb8 = [Image.fromarray(c.astype(int)) for c in rgb]
@@ -137,8 +141,7 @@ def ConvertEXRToJPG(exrfile, jpgfile):
 
 
 def main(argv):
-
-    if(len(argv)<2):
+    if (len(argv) < 2):
         print('filename to npy/ply is not passed as argument. terminated.')
         return
 
@@ -147,31 +150,34 @@ def main(argv):
     filename, file_extension = os.path.splitext(pathToFile)
 
     # for the moment supports npy and ply
-    if (file_extension=='.npy'):
+    if (file_extension == '.npy'):
         pclTime = np.load(pathToFile)
         pclTimeSize = np.shape(pclTime)
-    elif (file_extension=='.ply'):
+    elif (file_extension == '.ply'):
         ply = PlyData.read(pathToFile)
         vertex = ply['vertex']
         (x, y, z) = (vertex[t] for t in ('x', 'y', 'z'))
         pclTime = np.column_stack((x, y, z))
+    else:
+        print('unsupported file format.')
+        return
 
-    if (len(np.shape(pclTime))<3):
-        pclTimeSize = [1,np.shape(pclTime)[0], np.shape(pclTime)[1]]
+    if (len(np.shape(pclTime)) < 3):
+        pclTimeSize = [1, np.shape(pclTime)[0], np.shape(pclTime)[1]]
         pclTime.resize(pclTimeSize)
 
-    for pcli in range(0,pclTimeSize[0]):
-        pcl = pclTime[pcli,:,:]
+    for pcli in range(0, pclTimeSize[0]):
+        pcl = pclTime[pcli, :, :]
 
         pcl = standardize_bbox(pcl, 2048)
-        pcl = pcl[:,[2,0,1]]
-        pcl[:,0] *= -1
-        pcl[:,2] += 0.0125
+        pcl = pcl[:, [2, 0, 1]]
+        pcl[:, 0] *= -1
+        pcl[:, 2] += 0.0125
 
         xml_segments = [xml_head]
         for i in range(pcl.shape[0]):
-            color = colormap(pcl[i,0]+0.5,pcl[i,1]+0.5,pcl[i,2]+0.5-0.0125)
-            xml_segments.append(xml_ball_segment.format(pcl[i,0],pcl[i,1],pcl[i,2], *color))
+            color = colormap(pcl[i, 0] + 0.5, pcl[i, 1] + 0.5, pcl[i, 2] + 0.5 - 0.0125)
+            xml_segments.append(xml_ball_segment.format(pcl[i, 0], pcl[i, 1], pcl[i, 2], *color))
         xml_segments.append(xml_tail)
 
         xml_content = str.join('', xml_segments)
