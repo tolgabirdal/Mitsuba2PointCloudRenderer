@@ -1,6 +1,6 @@
 # Multiple Point Cloud Renderer using Mitsuba 2
 
-Calling the script 'render_mitsuba2_pc.py' automatically performs the following in order:
+Calling the script *render_mitsuba2_pc.py* automatically performs the following in order:
 
   1. generates an XML file, which describes a 3D scene in the format used by Mitsuba. 
   2. calls Mitsuba2 to render the point cloud into an EXR
