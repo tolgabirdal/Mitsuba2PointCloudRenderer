@@ -26,5 +26,5 @@ python3.6 render_mitsuba2_pc.py chair.npy
 python3.6 render_mitsuba2_pc.py chair.ply
 ```
 
-All the outputs will be saved in the directory of the input point cloud.
+All the outputs including the resulting JPG files will be saved in the directory of the input point cloud.
 
