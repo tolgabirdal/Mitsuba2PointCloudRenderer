@@ -3,9 +3,9 @@
 The script performs the following in order:
 
   1. generates an XML file, which describes a 3D scene in the format used by Mitsuba. 
-  2. call Mitsuba2 to render the point cloud into an EXR
-  3. process the EXR into a jpg file.
-  4. iterate for multiple point clouds present in the tensor (.npy)
+  2. calls Mitsuba2 to render the point cloud into an EXR
+  3. processes the EXR into a jpg file.
+  4. iterates for multiple point clouds present in the tensor (.npy)
   
 It could process both plys and npy. The script builds heavily upon [PointFlow renderer](https://github.com/zekunhao1995/PointFlowRenderer). 
 The intermediate EXR/XML files will remain in the folder and has to be removed by the user. 
@@ -26,5 +26,5 @@ python3.6 pointflow_fig_colorful.py chair.npy
 python3.6 pointflow_fig_colorful.py chair.ply
 ```
 
-The outputs will be saved in the same 
+All the outputs will be saved in the directory of the input point cloud.
 
