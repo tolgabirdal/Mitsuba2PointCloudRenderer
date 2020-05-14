@@ -148,10 +148,16 @@ def main(argv):
     pathToFile = argv[1]
 
     filename, file_extension = os.path.splitext(pathToFile)
+    folder = os.path.dirname(pathToFile)
+    filename = os.path.basename(pathToFile)
 
     # for the moment supports npy and ply
     if (file_extension == '.npy'):
         pclTime = np.load(pathToFile)
+        pclTimeSize = np.shape(pclTime)
+    elif (file_extension == '.npz'):
+        pclTime = np.load(pathToFile)
+        pclTime = pclTime['pred']
         pclTimeSize = np.shape(pclTime)
     elif (file_extension == '.ply'):
         ply = PlyData.read(pathToFile)
@@ -182,17 +188,20 @@ def main(argv):
 
         xml_content = str.join('', xml_segments)
 
-        xmlFile = ("mitsuba_%s_%02d.xml" % (filename, pcli))
+        xmlFile = ("%s/%s_%02d.xml" % (folder, filename, pcli))
 
         with open(xmlFile, 'w') as f:
             f.write(xml_content)
         f.close()
 
-        print(['Running Mitsuba, writing to: ', xmlFile])
-        subprocess.run([PATH_TO_MITSUBA2, xmlFile])
+        exrFile = ("%s/%s_%02d.exr" % (folder, filename, pcli))
+        if (not os.path.exists(exrFile)):
+            print(['Running Mitsuba, writing to: ', xmlFile])
+            subprocess.run([PATH_TO_MITSUBA2, xmlFile])
+        else:
+            print('skipping rendering because the EXR file already exists')
 
-        exrFile = ("mitsuba_%s_%02d.exr" % (filename, pcli))
-        png = ("mitsuba_%s_%02d.jpg" % (filename, pcli))
+        png = ("%s/%s_%02d.jpg" % (folder, filename, pcli))
 
         print(['Converting EXR to JPG...'])
         ConvertEXRToJPG(exrFile, png)
