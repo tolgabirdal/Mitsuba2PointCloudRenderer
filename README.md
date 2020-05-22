@@ -14,6 +14,7 @@ It could process both plys and npy. The script is heavily inspired by [PointFlow
 ## Dependencies
 * Python 3.6
 * [Mitsuba 2](http://www.mitsuba-renderer.org/)
+* Used python packages for 'render_mitsuba2_pc' : OpenEXR, Imath, PIL
 
 Ensure that Mitsuba 2 can be called as 'mitsuba' by following the [instructions here](https://mitsuba2.readthedocs.io/en/latest/src/getting_started/compiling.html#linux).
 Also make sure that the 'PATH_TO_MITSUBA2' in the code is replaced by the path to your local 'mitsuba' file.
