@@ -28,6 +28,9 @@ python3.6 render_mitsuba2_pc.py chair.npy
 
 # It could also render a ply file
 python3.6 render_mitsuba2_pc.py chair.ply
+
+# Render with a different number of points per object
+python3.6 render_mitsuba2_pc chair.ply -n 2048
 ```
 
 All the outputs including the resulting JPG files will be saved in the directory of the input point cloud. The intermediate EXR/XML files will remain in the folder and has to be removed by the user. 
