@@ -1,3 +1,4 @@
+import argparse
 import numpy as np
 import sys, os, subprocess
 import OpenEXR
@@ -140,12 +141,8 @@ def ConvertEXRToJPG(exrfile, jpgfile):
     Image.merge("RGB", rgb8).save(jpgfile, "JPEG", quality=95)
 
 
-def main(argv):
-    if (len(argv) < 2):
-        print('filename to npy/ply is not passed as argument. terminated.')
-        return
-
-    pathToFile = argv[1]
+def main(args):
+    pathToFile = args.filename
 
     filename, file_extension = os.path.splitext(pathToFile)
     folder = os.path.dirname(pathToFile)
@@ -175,7 +172,7 @@ def main(argv):
     for pcli in range(0, pclTimeSize[0]):
         pcl = pclTime[pcli, :, :]
 
-        pcl = standardize_bbox(pcl, 2048)
+        pcl = standardize_bbox(pcl, args.num_points_per_object)
         pcl = pcl[:, [2, 0, 1]]
         pcl[:, 0] *= -1
         pcl[:, 2] += 0.0125
@@ -207,5 +204,12 @@ def main(argv):
         ConvertEXRToJPG(exrFile, png)
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("filename", help="filename to npy/ply")
+    parser.add_argument("-n", "--num_points_per_object", type=int, default=2048)
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    main(sys.argv)
+    main(parse_args())
