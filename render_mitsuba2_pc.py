@@ -188,20 +188,20 @@ def main(argv):
 
         xml_content = str.join('', xml_segments)
 
-        xmlFile = ("%s/%s_%02d.xml" % (folder, filename, pcli))
+        xmlFile = os.path.join(folder, f"{filename}_{pcli:02d}.xml")
 
         with open(xmlFile, 'w') as f:
             f.write(xml_content)
         f.close()
 
-        exrFile = ("%s/%s_%02d.exr" % (folder, filename, pcli))
+        exrFile = os.path.join(folder, f"{filename}_{pcli:02d}.exr")
         if (not os.path.exists(exrFile)):
             print(['Running Mitsuba, writing to: ', xmlFile])
             subprocess.run([PATH_TO_MITSUBA2, xmlFile])
         else:
             print('skipping rendering because the EXR file already exists')
 
-        png = ("%s/%s_%02d.jpg" % (folder, filename, pcli))
+        png = os.path.join(folder, f"{filename}_{pcli:02d}.jpg")
 
         print(['Converting EXR to JPG...'])
         ConvertEXRToJPG(exrFile, png)
